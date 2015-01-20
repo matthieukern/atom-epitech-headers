@@ -1,7 +1,7 @@
 {
   "name": "epitech-headers",
   "main": "./lib/epitech-headers",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "private": false,
   "description": "Inserts a standard epitech header",
   "repository": "https://github.com/matthieukern/atom-epitech-headers",
