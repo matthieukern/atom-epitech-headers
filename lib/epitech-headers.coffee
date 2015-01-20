@@ -42,7 +42,7 @@ class EpitechHeaders
     fileName = tmp[tmp.length - 1]
     directory = path.split(fileName)[0];
     currentDay = moment().format("DD")
-    currentDate = moment().format("ddd MMM " + currentDay.replace('0', ' ') + " hh:mm:ss YYYY")
+    currentDate = moment().format("ddd MMM " + currentDay.replace('0', ' ').replace('1 ', '10').replace('2 ', '20').replace('3 ', '30') + " hh:mm:ss YYYY")
     text = "%file for %projectName in %path\n\nMade by %owner\nLogin   <%login@epitech.eu>\n\nStarted on  %cdate %creator\nLast update %udate %editor"
     text = text.replace('%owner', atom.config.get('epitech-headers.owner'))
     text = text.replace('%creator', atom.config.get('epitech-headers.owner'))
@@ -91,7 +91,7 @@ class EpitechHeaders
     if @hasHeader(editor)
       editor.scanInBufferRange /Last update .*/, [[0, 0], [10, 0]], ({matchText, replace}) ->
         currentDay = moment().format("DD")
-        currentDate = moment().format("ddd MMM " + currentDay.replace('0', ' ') + " hh:mm:ss YYYY")
+        currentDate = moment().format("ddd MMM " + currentDay.replace('0', ' ').replace('1 ', '10').replace('2 ', '20').replace('3 ', '30') + " hh:mm:ss YYYY")
         replace("Last update " + currentDate + " " + atom.config.get('epitech-headers.owner'))
 
   restoreCursor: (editor, callback) ->
