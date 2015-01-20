@@ -9,9 +9,6 @@ class EpitechHeaders
     login:
       type: 'string'
       default: 'login_x'
-    template:
-      type: 'string'
-      default: '%file for %projectName in %path\n\nMade by %owner\nLogin   <%login@epitech.eu>\n\nStarted on  %cdate %creator\nLast update %udate %editor'
 
   activate: ->
     atom.workspace.eachEditor (editor) =>
@@ -39,7 +36,7 @@ class EpitechHeaders
     directory = path.split(fileName)[0];
     currentDay = moment().format("DD")
     currentDate = moment().format("ddd MMM " + currentDay.replace('0', ' ') + " hh:mm:ss YYYY")
-    text = "#{atom.config.get('epitech-headers.template')}\n"
+    text = "%file for %projectName in %path\n\nMade by %owner\nLogin   <%login@epitech.eu>\n\nStarted on  %cdate %creator\nLast update %udate %editor"
     text = text.replace('%owner', atom.config.get('epitech-headers.owner'))
     text = text.replace('%creator', atom.config.get('epitech-headers.owner'))
     text = text.replace('%editor', atom.config.get('epitech-headers.owner'))
@@ -54,10 +51,16 @@ class EpitechHeaders
   onConfirm: (editor, text, projectName, closeCallback) ->
     closeCallback()
     text = text.replace('%projectName', projectName)
-    text = "\n" + text + "\n"
     editor.setCursorBufferPosition([0, 0], autoscroll: false)
-    editor.insertText(text, select: true)
-    editor.toggleLineCommentsInSelection()
+    if text.match(/.*\.c for.*/)
+      text = "/*\n" + text
+      text = text.replace(/\n/g, "\n** ")
+      text = text + "\n*/"
+      editor.insertText(text, select: true)
+    else
+      text = "\n" + text + "\n\n"
+      editor.insertText(text, select: true)
+      editor.toggleLineCommentsInSelection()
 
     range = editor.getSelectedBufferRange()
     editor.setCursorBufferPosition(range.end)
