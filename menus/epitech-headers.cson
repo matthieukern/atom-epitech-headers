@@ -1,0 +1,19 @@
+'context-menu':
+  '.overlayer': [
+    {
+      'label': 'Update Epitech Header'
+      'command': 'epitech-headers:insert'
+    }
+  ]
+
+'menu': [
+  {
+    'label': 'Packages'
+    'submenu': [
+      'label': 'Epitech Headers'
+      'submenu': [
+        { 'label': 'Insert', 'command': 'epitech-headers:insert'}
+      ]
+    ]
+  }
+]
