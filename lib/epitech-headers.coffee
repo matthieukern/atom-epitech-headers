@@ -23,7 +23,14 @@ class EpitechHeaders
     editor = atom.workspace.getActiveEditor()
     return unless editor?
 
-    @insertHeader(editor)
+    if editor.getPath()
+      @insertHeader(editor)
+    else
+      atom.confirm
+        message: "Please save your file first."
+        detailedMessage: ""
+        buttons:
+          Ok: ->
 
   update: ->
     @updateHeader(atom.workspace.getActiveEditor())
@@ -87,9 +94,6 @@ class EpitechHeaders
         currentDate = moment().format("ddd MMM " + currentDay.replace('0', ' ') + " hh:mm:ss YYYY")
         replace("Last update " + currentDate + " " + atom.config.get('epitech-headers.owner'))
 
-  multiplyText: (text, count) ->
-    Array(count + 1).join(text)
-
   restoreCursor: (editor, callback) ->
     marker = editor.markBufferPosition(editor.getCursorBufferPosition(), persistent: false)
 
@@ -97,10 +101,5 @@ class EpitechHeaders
 
     editor.setCursorBufferPosition(marker.getHeadBufferPosition())
     marker.destroy()
-
-  wrap: (text, buffer) ->
-    prebuffer = @multiplyText("\n", buffer)
-    postbuffer = @multiplyText("\n", buffer)
-    prebuffer + text + postbuffer
 
 module.exports = new EpitechHeaders()
