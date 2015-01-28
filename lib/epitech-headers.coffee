@@ -59,7 +59,7 @@ class EpitechHeaders
     closeCallback()
     text = text.replace('%projectName', projectName)
     editor.setCursorBufferPosition([0, 0], autoscroll: false)
-    if text.match(/.*\.c for.*/)
+    if text.match(/.*\.[ch] for.*/)
       text = "/*\n" + text
       text = text.replace(/\n/g, "\n** ")
       text = text + "\n*/"
