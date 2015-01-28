@@ -64,6 +64,11 @@ class EpitechHeaders
       text = text.replace(/\n/g, "\n** ")
       text = text + "\n*/"
       editor.insertText(text, select: true)
+    else if text.match(/.*Makefile for.*/)
+      text = "##\n" + text
+      text = text.replace(/\n/g, "\n## ")
+      text = text + "\n##"
+      editor.insertText(text, select: true)
     else
       text = "\n" + text + "\n\n"
       editor.insertText(text, select: true)
