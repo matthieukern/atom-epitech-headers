@@ -19,6 +19,8 @@
     }
   },
   "dependencies": {
-    "moment": "~2.9.0"
+    "moment": "~2.9.0",
+    "atom-space-pen-views": "^2.0.3",
+    "space-pen": "*"
   }
 }

@@ -11,16 +11,15 @@ class EpitechHeaders
       default: 'login_x'
 
   activate: ->
-    atom.workspace.eachEditor (editor) =>
-      editor.buffer.on 'will-be-saved', =>
-       @updateHeader(editor)
+    atom.workspace.observeTextEditors (editor) =>
+      editor.buffer.onWillSave(() => @updateHeader(editor))
 
     atom.commands.add 'atom-workspace',
       'epitech-headers:insert': =>
         @insert()
 
   insert: ->
-    editor = atom.workspace.getActiveEditor()
+    editor = atom.workspace.getActiveTextEditor()
     return unless editor?
 
     if editor.getPath()
@@ -33,7 +32,9 @@ class EpitechHeaders
           Ok: ->
 
   update: ->
-    @updateHeader(atom.workspace.getActiveEditor())
+    editor = atom.workspace.getActiveTextEditor()
+    return unless editor
+    @updateHeader(editor)
 
   getHeaderText: (editor) ->
     editor = atom.workspace.getActiveTextEditor()
@@ -93,6 +94,8 @@ class EpitechHeaders
           @getHeaderText(editor)
 
   updateHeader: (editor) ->
+    return unless editor.isModified()
+
     if @hasHeader(editor)
       editor.scanInBufferRange /Last update .*/, [[0, 0], [10, 0]], ({matchText, replace}) ->
         currentDay = moment().format("DD")
