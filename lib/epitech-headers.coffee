@@ -9,10 +9,13 @@ class EpitechHeaders
     login:
       type: 'string'
       default: 'login_x'
+    domain:
+      type: 'string'
+      default: 'epitech.eu'
 
   activate: ->
     atom.workspace.observeTextEditors (editor) =>
-      editor.buffer.onWillSave(() => @updateHeader(editor))
+      editor.getBuffer().onWillSave(() => @updateHeader(editor))
 
     atom.commands.add 'atom-workspace',
       'epitech-headers:insert': =>
@@ -44,11 +47,12 @@ class EpitechHeaders
     directory = path.split(fileName)[0];
     currentDay = moment().format("DD")
     currentDate = moment().format("ddd MMM " + currentDay.replace('0', ' ').replace('1 ', '10').replace('2 ', '20').replace('3 ', '30') + " HH:mm:ss YYYY")
-    text = "%file for %projectName in %path\n\nMade by %owner\nLogin   <%login@epitech.eu>\n\nStarted on  %cdate %creator\nLast update %udate %editor"
+    text = "%file for %projectName in %path\n\nMade by %owner\nLogin   <%login@%domain>\n\nStarted on  %cdate %creator\nLast update %udate %editor"
     text = text.replace('%owner', atom.config.get('epitech-headers.owner'))
     text = text.replace('%creator', atom.config.get('epitech-headers.owner'))
     text = text.replace('%editor', atom.config.get('epitech-headers.owner'))
     text = text.replace('%login', atom.config.get('epitech-headers.login'))
+    text = text.replace('%domain', atom.config.get('epitech-headers.domain'))
     text = text.replace('%file', fileName)
     text = text.replace('%path', directory)
     text = text.replace('%cdate', currentDate)
@@ -85,7 +89,7 @@ class EpitechHeaders
     @hasHeaderInText(obj.getTextInRange([[0, 0], [10, 0]]))
 
   hasHeaderInText: (text) ->
-    text.match(/.* for .* in .*\n.*\n.*Made by .*\n.*Login   <.*@epitech.eu>.*\n.*\n.*Started on  .*\n.*Last update .*\n/m)
+    text.match(/.* for .* in.*\r?\n.*\r?\n.*Made by .*\r?\n.*Login   <.*@.*>.*\r?\n.*\r?\n.*Started on  .*\r?\n.*Last update .*\r?\n/m)
 
   insertHeader: (editor) ->
     unless @hasHeader(editor)
